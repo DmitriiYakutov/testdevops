@@ -8,4 +8,3 @@ RUN pip install psycopg2
 CMD [ "python", "./server.py" ]
 
 EXPOSE 8000
-EXPOSE 5432
