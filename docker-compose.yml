@@ -1,7 +1,7 @@
-version: '3.9'
+version: '1'
 services:
   db:
-    image: postgres:14.1-alpine
+    image: postgres:latest
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -10,6 +10,12 @@ services:
       - '5432:5432'
     volumes:
       - db:/var/lib/postgresql/data
+  server:
+    build: /
+    image: testdevops
+    restart: always
+    ports:
+      - '8000:8000'
 volumes:
   db:
     driver: local
