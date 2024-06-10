@@ -1,8 +1,8 @@
 FROM python:3.9
 WORKDIR /server
 
-COPY ./server.py /server
+ADD server.py /server/
 
 CMD [ "python", "./server.py" ]
 
-EXPOSE 8000:8000
+EXPOSE 8000
