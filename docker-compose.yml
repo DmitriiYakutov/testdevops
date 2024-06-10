@@ -3,6 +3,7 @@ services:
   db:
     build: /database
     image: postgres
+    container_name: db
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -13,12 +14,30 @@ services:
       - '5432:5432'
     volumes:
       - db:/var/lib/postgresql/data
+    networks:
+      - db
+
   server:
     build: /server
-    image: testdevops
+    image: pyserver
+    container_name: pyserver
     restart: always
     ports:
       - '8000:8000'
+    depends_on:
+      - db
+    links:
+      - db:db
+    networks:
+      - server
+      - db
+
 volumes:
   db:
     driver: local
+
+networks:
+  db:
+    driver: bridge
+  server:
+    driver: bridge

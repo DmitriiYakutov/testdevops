@@ -13,9 +13,11 @@ def run(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
       httpd.server_close()
 
 def select_from_db():
+    print('connecting to DB server')
     conn = psycopg2.connect(dbname='postgresdb', user='postgres',
-                            password='postgres', host='127.0.0.1')
+                            password='postgres', host='db', port=5432)
     cursor = conn.cursor()
+    print('run select')
     cursor.execute('select * FROM author LIMIT 10')
     records = cursor.fetchall()
     cursor.close()
@@ -31,7 +33,7 @@ class HttpGetHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write('<html><head><meta charset="utf-8">'.encode())
         self.wfile.write('<title>Простой HTTP-сервер.</title></head>'.encode())
-        body = '<body>В базе данных есть записи' + select_from_db() + '</body></html>'
+        body = '<body>В базе данных есть запис: ' + str(select_from_db()) + '</body></html>'
         self.wfile.write(body.encode())
 
 run(handler_class=HttpGetHandler)

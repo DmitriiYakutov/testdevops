@@ -3,5 +3,5 @@ CREATE TABLE author (
   name VARCHAR(100) NOT NULL
 );
 
-INSERT INTO author(name) VALUES('Virginia Woolf');
-INSERT INTO author(name) VALUES('Ibelive Icanflyev');
+INSERT INTO author(id, name) VALUES(1, 'Virginia Woolf');
+INSERT INTO author(id, name) VALUES(2, 'Ibelive Icanflyev');
