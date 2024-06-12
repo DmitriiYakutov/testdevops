@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0b35b6e19b99b6d46874fcdc2166c5777ee37b7ef6a0462b98a68f39ab9972d7
-size 700
+version: '1'
+services:
+  db:
+    build: /database
+    image: postgres
+    container_name: db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgresdb
+      - PGDATA=/var/lib/postgresql/data/pgdatad
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - db
+
+  server:
+    build: /server
+    image: pyserver
+    container_name: pyserver
+    restart: always
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    links:
+      - db:db
+    networks:
+      - server
+      - db
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  db:
+    driver: bridge
+  server:
+    driver: bridge
