@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:885c833dafbee58bdcd49f5c9baee27c7a88293d7024caef0ab29a33f56919a8
-size 423
+stages:
+  - build
+
+build-docker:
+  stage: build
+  image: docker:stable
+  only:
+    - master
+    - develop
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u Deployer -p ${ACCESS_TOKEN} registry.gitlab.com
+  script:
+    - docker build -t ${DOCKER_ENV_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} --build-arg branch=${CI_COMMIT_REF_NAME} .
+    - docker push ${DOCKER_ENV_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
